@@ -95,7 +95,7 @@ class VKAuthorizer implements Authorizer, AuthorizedInit {
                 // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
                 callback.onAuthenticationResult(AuthenticationResult.create(name())
                         .status(ResultStatus.ERROR)
-                        .message(error.errorMessage)
+                        .message(error.toString())
                         .build());
             }
         })) {
