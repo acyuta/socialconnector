@@ -62,12 +62,19 @@ class VKAuthorizer implements Authorizer, AuthorizedInit {
 
     @Override
     public void auth() {
-        if (activity != null) {
-            startForActivity(activity);
-        } else if (fragment != null) {
-            startForFragment(fragment, fragment.getActivity());
-        } else if (fragmentSupport != null) {
-            startForFragment(fragmentSupport, fragmentSupport.getContext());
+        if (SocialAuthorizationManager.isInitialized()) {
+            if (activity != null) {
+                startForActivity(activity);
+            } else if (fragment != null) {
+                startForFragment(fragment, fragment.getActivity());
+            } else if (fragmentSupport != null) {
+                startForFragment(fragmentSupport, fragmentSupport.getContext());
+            }
+        } else {
+            callback.onAuthenticationResult(AuthenticationResult.create(name())
+                    .status(ResultStatus.ERROR)
+                    .message("VK Sdk not initialized")
+                    .build());
         }
     }
 

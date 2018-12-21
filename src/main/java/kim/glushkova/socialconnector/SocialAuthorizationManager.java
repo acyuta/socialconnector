@@ -8,12 +8,19 @@ import com.vk.sdk.VKSdk;
 
 public class SocialAuthorizationManager {
 
+    private static boolean isInit;
+
     public static void init(Context context) {
+        isInit = true;
         VKSdk.initialize(context);
     }
 
     public static Builder getInstance() {
         return new Builder();
+    }
+
+    static boolean isInitialized() {
+        return isInit;
     }
 
 
