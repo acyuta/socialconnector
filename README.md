@@ -29,7 +29,12 @@ For example values/secrets.xml
 <uses-permission android:name="android.permission.INTERNET" />
 
 ...
-
+        <!-- vk -->
+        <activity
+            android:name="com.vk.sdk.VKServiceActivity"
+            android:label="ServiceActivity"
+            android:theme="@style/VK.Transparent" />
+        <!-- vk end -->
 
     <!-- Facebook Values -->
         <meta-data
