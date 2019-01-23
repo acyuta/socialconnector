@@ -4,7 +4,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 
-import com.facebook.FacebookSdk;
+import com.facebook.accountkit.AccountKit;
+import com.facebook.login.LoginManager;
 import com.vk.sdk.VKSdk;
 
 public class SocialAuthorizationManager {
@@ -14,6 +15,37 @@ public class SocialAuthorizationManager {
     public static void init(Context context) {
         isInit = true;
         VKSdk.initialize(context);
+    }
+
+    public static void logout(String... authorizeKey) {
+        for (String s : authorizeKey) {
+            logoutCurrent(s);
+        }
+    }
+
+    public static void logoutCurrent(String key) {
+        try {
+            switch (key) {
+                case Authorizer.PHONE:
+                case Authorizer.EMAIL:
+                    AccountKit.logOut();
+                    break;
+                case Authorizer.VK:
+                    VKSdk.logout();
+                    break;
+                case Authorizer.FACEBOOK:
+                    LoginManager.getInstance().logOut();
+                    break;
+            }
+        } catch (Throwable th) {
+        }
+    }
+
+    public static void logoutAll() {
+        logout(Authorizer.EMAIL,
+                Authorizer.FACEBOOK,
+                Authorizer.VK,
+                Authorizer.PHONE);
     }
 
     public static Builder getInstance() {
