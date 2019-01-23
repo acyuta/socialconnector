@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 
+import com.facebook.FacebookSdk;
 import com.vk.sdk.VKSdk;
 
 public class SocialAuthorizationManager {
@@ -79,6 +80,10 @@ public class SocialAuthorizationManager {
 
         public PhoneAuthrizerBuilder phone() {
             return new PhoneAuthrizerBuilder(activity, fragment, fragmentSupport, callback);
+        }
+
+        public FBAccountAuthorizerEmailBuilder email() {
+            return new FBAccountAuthorizerEmailBuilder(activity, fragment, fragmentSupport, callback);
         }
     }
 }

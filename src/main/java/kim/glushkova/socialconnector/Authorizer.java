@@ -8,6 +8,7 @@ public interface Authorizer {
     String FACEBOOK = "fb";
     String VK = "vk";
     String PHONE = "phone";
+    String EMAIL = "fb_email";
 
     void auth();
 

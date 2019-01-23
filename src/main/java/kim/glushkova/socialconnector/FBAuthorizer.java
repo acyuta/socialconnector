@@ -41,8 +41,8 @@ class FBAuthorizer implements Authorizer, FacebookCallback<LoginResult>, Authori
 
     @Override
     public FBAuthorizer intForFragment(android.support.v4.app.Fragment fragment, AuthenticationCallback callback) {
-        register(callback);
         this.fs = fragment;
+        register(callback);
         return this;
     }
 
@@ -77,13 +77,13 @@ class FBAuthorizer implements Authorizer, FacebookCallback<LoginResult>, Authori
 
     @Override
     public void onSuccess(LoginResult loginResult) {
-        unregister();
         callback.onAuthenticationResult(
                 AuthenticationResult.create(name())
                         .status(ResultStatus.OK)
                         .token(loginResult.getAccessToken().getToken())
                         .build()
         );
+        unregister();
     }
 
     @Override
@@ -93,18 +93,18 @@ class FBAuthorizer implements Authorizer, FacebookCallback<LoginResult>, Authori
 
     @Override
     public void onCancel() {
-        unregister();
         callback.onAuthenticationResult(AuthenticationResult.create(name())
                 .status(ResultStatus.CANCELED)
                 .build());
+        unregister();
     }
 
     @Override
     public void onError(FacebookException error) {
-        unregister();
         callback.onAuthenticationResult(AuthenticationResult.create(name())
                 .status(ResultStatus.ERROR)
                 .message(error.toString())
                 .build());
+        unregister();
     }
 }
