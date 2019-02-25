@@ -88,7 +88,7 @@ class VKAuthorizer implements Authorizer, AuthorizedInit {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null && !com.vk.api.sdk.VK.onActivityResult(requestCode, resultCode, data, new VKAuthCallback() {
+        if (data == null || !com.vk.api.sdk.VK.onActivityResult(requestCode, resultCode, data, new VKAuthCallback() {
             @Override
             public void onLoginFailed(int i) {
                 callback.onAuthenticationResult(AuthenticationResult.create(name())
