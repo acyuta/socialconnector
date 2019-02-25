@@ -6,7 +6,7 @@ import android.content.Context;
 
 import com.facebook.accountkit.AccountKit;
 import com.facebook.login.LoginManager;
-import com.vk.sdk.VKSdk;
+import com.vk.api.sdk.VK;
 
 public class SocialAuthorizationManager {
 
@@ -14,7 +14,7 @@ public class SocialAuthorizationManager {
 
     public static void init(Context context) {
         isInit = true;
-        VKSdk.initialize(context);
+        VK.initialize(context);
     }
 
     public static void logout(String... authorizeKey) {
@@ -31,7 +31,7 @@ public class SocialAuthorizationManager {
                     AccountKit.logOut();
                     break;
                 case Authorizer.VK:
-                    VKSdk.logout();
+                    VK.logout();
                     break;
                 case Authorizer.FACEBOOK:
                     LoginManager.getInstance().logOut();

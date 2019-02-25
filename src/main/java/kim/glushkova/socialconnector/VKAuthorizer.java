@@ -5,11 +5,10 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKCallback;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.VKServiceActivity;
-import com.vk.sdk.api.VKError;
+import com.vk.api.sdk.auth.VKAccessToken;
+import com.vk.api.sdk.auth.VKAuthCallback;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -24,19 +23,23 @@ class VKAuthorizer implements Authorizer, AuthorizedInit {
     private android.support.v4.app.Fragment fragmentSupport;
 
     private void startForActivity(Activity activity) {
-        VKSdk.login(activity);
+        com.vk.api.sdk.VK.login(activity);
     }
 
     private void startForFragment(Fragment fragment, Context context) {
-        VKSdk.login(fragment);
+        com.vk.api.sdk.VK.login(fragment.getActivity());
     }
 
     private void startForFragment(android.support.v4.app.Fragment fragment, Context context) {
-        Intent intent = new Intent(context, VKServiceActivity.class);
-        intent.putExtra("arg1", VKServiceActivity.VKServiceType.Authorization.name());
-        intent.putStringArrayListExtra("arg2", scopes);
-        intent.putExtra("arg4", VKSdk.isCustomInitialize());
-        fragment.startActivityForResult(intent, VKServiceActivity.VKServiceType.Authorization.getOuterCode());
+        if (fragment.getActivity() != null) {
+            com.vk.api.sdk.VK.login(fragment.getActivity());
+        } else {
+            this.callback.onAuthenticationResult(AuthenticationResult
+                    .create(VK)
+                    .status(ResultStatus.ERROR)
+                    .message("Can't found activity")
+                    .build());
+        }
     }
 
     @Override
@@ -85,25 +88,23 @@ class VKAuthorizer implements Authorizer, AuthorizedInit {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+        if (data == null && !com.vk.api.sdk.VK.onActivityResult(requestCode, resultCode, data, new VKAuthCallback() {
             @Override
-            public void onResult(VKAccessToken res) {
-                // Пользователь успешно авторизовался
-                callback.onAuthenticationResult(
-                        AuthenticationResult.create(name())
-                                .status(ResultStatus.OK)
-                                .token(res.accessToken)
-                                .build()
-                );
+            public void onLoginFailed(int i) {
+                callback.onAuthenticationResult(AuthenticationResult.create(name())
+                        .status(ResultStatus.ERROR)
+                        .message("Error code: " + i)
+                        .build());
             }
 
             @Override
-            public void onError(VKError error) {
-                // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
-                callback.onAuthenticationResult(AuthenticationResult.create(name())
-                        .status(ResultStatus.ERROR)
-                        .message(error.toString())
-                        .build());
+            public void onLogin(@NotNull VKAccessToken res) {
+                callback.onAuthenticationResult(
+                        AuthenticationResult.create(name())
+                                .status(ResultStatus.OK)
+                                .token(res.getAccessToken())
+                                .build()
+                );
             }
         })) {
             callback.onAuthenticationResult(AuthenticationResult.create(name())
