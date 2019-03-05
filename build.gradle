@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 27
     resourcePrefix 'socialconnector_'
 
     defaultConfig {
@@ -38,8 +38,8 @@ repositories {
 
 dependencies {
     //noinspection GradleCompatible
-    implementation 'com.android.support:support-fragment:28.0.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:support-fragment:27.1.1'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
     //auth
     implementation 'com.facebook.android:account-kit-sdk:4.39.0'
     implementation 'com.vk:androidsdk:2.0.2'
