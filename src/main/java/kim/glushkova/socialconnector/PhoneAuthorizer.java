@@ -46,7 +46,7 @@ class PhoneAuthorizer implements Authorizer, AuthorizedInit {
     }
 
     private AuthenticationResult handleActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == APP_REQUEST_CODE) { // confirm that this response matches your request
+        if (requestCode == APP_REQUEST_CODE && data != null) { // confirm that this response matches your request
             AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
             if (loginResult.getError() != null) {
                 return AuthenticationResult.create(name())
